@@ -1,11 +1,3 @@
-package net.ycx.drive.mvp.fragment;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 /*
   Created by shiyawei on 17/7/11.
@@ -20,10 +12,12 @@ public abstract class AbsFragment extends Fragment {
     protected boolean isVisible;
     private boolean isPrepared;
     private boolean isFirst = true;
-    private boolean openLazy = true;
+    //配合viewpager 首次是否一次性加载对应的fragment
+    private boolean loadOnlyOnceImmediately = true;
 
-    public AbsFragment(boolean openLazy) {
-        this.openLazy = openLazy;
+
+    public AbsFragment(boolean loadOnlyOnceImmediately) {
+        loadOnlyOnceImmediately = loadOnlyOnceImmediately;
     }
 
     public AbsFragment() {
@@ -59,7 +53,7 @@ public abstract class AbsFragment extends Fragment {
 
         if (getUserVisibleHint()) {
             isVisible = true;
-            if (openLazy) {
+            if (loadOnlyOnceImmediately) {
                 lazyLoad();
             }
             if (isPrepared) {
@@ -87,7 +81,7 @@ public abstract class AbsFragment extends Fragment {
      * created by 17/10/25 下午2:20
      */
     private void lazyLoad() {
-        if (!openLazy) {
+        if (! loadOnlyOnceImmediately) {
             isFirst = false;
             initData();
             return;
